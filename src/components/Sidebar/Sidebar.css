@@ -1,0 +1,41 @@
+.side-drawer {
+    height: 100%;
+    width: 0px;
+    background: black;
+    position: fixed;
+    top: 90px;
+    left: 0;
+    z-index: 1;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.side-drawer.open {
+    width: 250px;
+}
+
+.side-drawer ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.side-drawer li {
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    margin: 10px 0;
+}
+
+.side-drawer a {
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.side-drawer a:hover,
+.side-drawer a:active {
+    color: #fa923f;
+}
