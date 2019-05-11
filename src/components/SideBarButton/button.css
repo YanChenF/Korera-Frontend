@@ -5,6 +5,12 @@
     height: 40px;
     font-size: 25px;
     border-radius: 0 10px 10px 0;
+    outline-style: none;
+    border: none;
+}
+
+.button:focus {
+    outline: 0;
 }
 
 .button i {

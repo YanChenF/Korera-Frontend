@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './Header/Header';
 import SideBar from './Sidebar/Sidebar';
 import { Switch, Route } from 'react-router-dom';
-import Login from '../containers/Login';
+import Login from '../containers/Login/Login';
 import Signup from '../containers/Signup';
 import Resource from '../containers/Resource';
 import Project from '../containers/Project';
