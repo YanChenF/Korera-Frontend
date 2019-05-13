@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
-import classes from './Login.module.css';
+import classes from './Signup.module.css';
 
-class Login extends Component {
+class Signup extends Component {
 
     state = {
         controls: {
@@ -87,9 +87,9 @@ class Login extends Component {
   
       }
 
-    switchToSingup = () => {
+    switchToLogin = () => {
         console.log(this.props.history);
-        this.props.history.push('/signup');
+        this.props.history.push('/login');
     }
 
 
@@ -121,7 +121,7 @@ class Login extends Component {
                 {/* <Button btnType="Success">Log in</Button> */}
                 <button className="btn-login">Log in</button>
             </form>
-            <button onClick={this.switchToSingup}>Switch To Signup</button>
+            <button onClick={this.switchToLogin}>Switch To Login</button>
         </div>);
     }
 }
@@ -131,4 +131,4 @@ const mapStateToProps = (state) => {
 } 
 
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(Signup);

@@ -3,7 +3,7 @@ import Header from './Header/Header';
 import SideBar from './Sidebar/Sidebar';
 import { Switch, Route } from 'react-router-dom';
 import Login from '../containers/Login/Login';
-import Signup from '../containers/Signup';
+import Signup from '../containers/Signup/Signup';
 import Resource from '../containers/Resource';
 import Project from '../containers/Project';
 import Formula from '../containers/Formula';
