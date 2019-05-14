@@ -1,0 +1,101 @@
+import React from "react";
+import { connect } from "react-redux";
+import XLSX from "xlsx";
+import { setResource, setColumns } from "../../redux/actions/actionCreators";
+
+class CsvFileInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleFile = this.handleFile.bind(this);
+  }
+  handleFile(file) {
+    const reader = new FileReader();
+    const rABS = !!reader.readAsBinaryString;
+    reader.onload = ({ target: { result } }) => {
+        
+      const wb = XLSX.read(result, { type: rABS ? "binary" : "array" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const columns = XLSX.utils.sheet_to_json(ws, { header: 1 })[0];
+      const data = XLSX.utils.sheet_to_json(ws);
+      console.log(columns);
+      console.log(data);
+      this.props.setColumns(columns);
+      this.props.setResource(data);
+    };
+    if (rABS) reader.readAsBinaryString(file);
+    else reader.readAsArrayBuffer(file);
+  }
+  render() {
+    return <DataInput handleFile={this.handleFile} />;
+  }
+}
+
+const mapDispatchToProps = {
+  setResource,
+  setColumns
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CsvFileInput);
+
+class DataInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.fileInput = React.createRef();
+  }
+  handleChange(e) {
+    const files = e.target.files;
+    if (files && files[0]) this.props.handleFile(files[0]);
+  }
+  render() {
+    return (
+      <>
+        <button
+          style={{ marginLeft: 10 }}
+          onClick={() => this.fileInput.current.click()}
+        >
+          <i className="fas fa-upload" />
+          &nbsp; Import File
+        </button>
+        <input
+          ref={this.fileInput}
+          type="file"
+          hidden
+          accept={SheetJSFT}
+          onChange={this.handleChange}
+        />
+      </>
+    );
+  }
+}
+
+const SheetJSFT = [
+  "xlsx",
+  "xlsb",
+  "xlsm",
+  "xls",
+  "xml",
+  "csv",
+  "txt",
+  "ods",
+  "fods",
+  "uos",
+  "sylk",
+  "dif",
+  "dbf",
+  "prn",
+  "qpw",
+  "123",
+  "wb*",
+  "wq*",
+  "html",
+  "htm"
+]
+  .map(function(x) {
+    return "." + x;
+  })
+  .join(",");
