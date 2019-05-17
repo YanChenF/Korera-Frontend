@@ -59,3 +59,17 @@ export const fetchAttributeNames = (projectId) => (dispatch => {
         dispatch(addColumn(newColumns));
     });
 })
+
+export const addSelected = (selection) => {
+    return {
+        type: ActionTypes.ADD_SELECTION,
+        payload: selection
+    }
+}
+
+export const deleteSelected = (selection) => {
+    return {
+        type: ActionTypes.DELETE_SELECTION,
+        payload: selection
+    }
+}

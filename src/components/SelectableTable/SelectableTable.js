@@ -113,7 +113,7 @@ export class SelectTable extends React.Component {
         ),
         width: 20
     })
-    console.log(columns);
+    // console.log(columns);
     // const {
     //   toggleSelection,
     //   toggleAll,
@@ -127,8 +127,11 @@ export class SelectTable extends React.Component {
     // };
     return (
       <div style={{ padding: "10px" }}>
-        <button onClick={this.logSelection}>Log Selection to Console</button>
-        <input type="checkbox" checked={this.state.selectAll} onChange={this.toggleAll}/> Select All
+        {this.props.profile ?<div>  <button onClick={this.logSelection}>Log Selection to Console</button>
+        <input type="checkbox" checked={this.state.selectAll} onChange={this.toggleAll}/> Select All</div> : null}
+        {this.props.add ? <button onClick={() => this.props.add(this.state.selection)}>add</button> : null}
+        {this.props.delete ? <button onClick={() => {this.props.delete(this.state.selection);
+  this.setState({selection: []}); }}>delete</button> : null}
         {data ? (
           <ReactTable
             data={data}

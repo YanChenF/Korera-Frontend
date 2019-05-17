@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactTable from 'react-table';
+// import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import { setResource, addRow, addColumn,
-        fetchResources, setColumns, fetchAttributeNames } from "../redux/actions/actionCreators";
+        fetchResources, setColumns, fetchAttributeNames,
+        addSelected, deleteSelected } from "../redux/actions/actionCreators";
 import "./Resource.css";
 import SelectTable from '../components/SelectableTable/SelectableTable';
 
@@ -80,12 +81,18 @@ class Project extends Component {
       }
 
       render() {
-        const selectedResource = [...this.props.resource];
+        const selectedResource = this.props.resource.filter(
+            resource => this.props.selected.includes(resource.id)
+        );
+        console.log(selectedResource);
         return (<div>
             <SelectTable resource={this.props.resource}
-                columns={this.props.columns}/>
+                columns={this.props.columns}
+                add={this.props.addSelected}
+                profile={true}/>
             <SelectTable resource={selectedResource}
-                columns={this.props.columns}/>
+                columns={this.props.columns}
+                delete={this.props.deleteSelected}/>
                 </div>);
       }
 
@@ -122,12 +129,14 @@ const mapDispatchToProps = dispatch => {
         addColumn: (name) => dispatch(addColumn(name)),
         setColumns: (columns) => dispatch(setColumns(columns)),
         fetchResources: (projectId) => dispatch(fetchResources(projectId)),
-        fetchAttributes: (projectId) => dispatch(fetchAttributeNames(projectId))
+        fetchAttributes: (projectId) => dispatch(fetchAttributeNames(projectId)),
+        addSelected: (selection) => dispatch(addSelected(selection)),
+        deleteSelected: (selection) => dispatch(deleteSelected(selection))
     }
 }
 
-const mapStateToProps = state => {
-    return {resource: state.resource.data, columns: state.resource.columns};
+const mapStateToProps = ({ resource: {data, columns, selected }}) => {
+    return {resource: data, columns, selected};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);
