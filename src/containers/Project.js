@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import "react-table/react-table.css";
 import { setResource, addRow, addColumn,
         fetchResources, setColumns, fetchAttributeNames,
-        addSelected, deleteSelected } from "../redux/actions/actionCreators";
+        addSelected, deleteSelected, saveSelected } from "../redux/actions/actionCreators";
 import "./Resource.css";
 import SelectTable from '../components/SelectableTable/SelectableTable';
 
@@ -80,19 +80,33 @@ class Project extends Component {
           this.setState({selectAll, selection});
       }
 
+      handleSubmit = (selectedResource) => {
+          this.props.saveSelected(selectedResource);
+          this.props.history.push('/formula');
+      }
+
+
+
       render() {
+
+        //put variables like this in state or just in render??
         const selectedResource = this.props.resource.filter(
             resource => this.props.selected.includes(resource.id)
         );
-        console.log(selectedResource);
+
+
+        // console.log(selectedResource);
         return (<div>
             <SelectTable resource={this.props.resource}
                 columns={this.props.columns}
                 add={this.props.addSelected}
+                selection={this.props.selected}
                 profile={true}/>
             <SelectTable resource={selectedResource}
                 columns={this.props.columns}
                 delete={this.props.deleteSelected}/>
+            <button onClick={() => this.handleSubmit(selectedResource)}
+            disabled={this.props.selected.length === 0}>Submit</button>
                 </div>);
       }
 
@@ -131,7 +145,8 @@ const mapDispatchToProps = dispatch => {
         fetchResources: (projectId) => dispatch(fetchResources(projectId)),
         fetchAttributes: (projectId) => dispatch(fetchAttributeNames(projectId)),
         addSelected: (selection) => dispatch(addSelected(selection)),
-        deleteSelected: (selection) => dispatch(deleteSelected(selection))
+        deleteSelected: (selection) => dispatch(deleteSelected(selection)),
+        saveSelected: (selectedData) => dispatch(saveSelected(selectedData))
     }
 }
 

@@ -5,7 +5,8 @@ const initialState = {
     isLoading: false,
     error: null,
     columns: [],
-    selected: []
+    selected: [],
+    selectedData: []
 };
 
 const Resource = (state = initialState, action) => {
@@ -30,6 +31,9 @@ const Resource = (state = initialState, action) => {
                 value => !action.payload.includes(value)
             );
             return {...state, selected: removed};
+
+        case ActionTypes.SAVE_SELECTION:
+            return {...state, selectedData: action.payload}
         default: return state;
     }
 }

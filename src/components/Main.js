@@ -7,6 +7,7 @@ import Signup from '../containers/Signup/Signup';
 import Resource from '../containers/Resource';
 import Project from '../containers/Project';
 import Formula from '../containers/Formula';
+import Template from '../containers/Template/Template';
 import SideBarButton from './SideBarButton/SideBarButton';
 import './main.css';
 
@@ -35,6 +36,7 @@ export default class Main extends Component {
                         <Route path='/resource' component={Resource}/>
                         <Route path='/project' component={Project}/>
                         <Route path='/formula' component={Formula}/>
+                        <Route paht='/template' component={Template}/>
                     </Switch>
                 </div>
 

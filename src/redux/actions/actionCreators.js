@@ -73,3 +73,10 @@ export const deleteSelected = (selection) => {
         payload: selection
     }
 }
+
+export const saveSelected = (selectedData) => {
+    return {
+        type: ActionTypes.SAVE_SELECTION,
+        payload: selectedData
+    }
+}

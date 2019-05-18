@@ -36,7 +36,7 @@ export class SelectTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selection: [],
+      selection: this.props.selection? [...this.props.selection]: [],
       selectAll: false,
     };
   }
