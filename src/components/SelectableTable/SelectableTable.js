@@ -127,15 +127,22 @@ export class SelectTable extends React.Component {
     // };
     return (
       <div style={{ padding: "10px" }}>
-        {this.props.profile ?<div>  <button onClick={this.logSelection}>Log Selection to Console</button>
-        <input type="checkbox" checked={this.state.selectAll} onChange={this.toggleAll}/> Select All</div> : null}
-        {this.props.add ? <button onClick={() => this.props.add(this.state.selection)}>add</button> : null}
-        {this.props.delete ? <button onClick={() => {this.props.delete(this.state.selection);
-  this.setState({selection: []}); }}>delete</button> : null}
+        <div className='header-project'>
+          <div className='spacer'>{this.props.header}</div>
+          {this.props.profile ? <span>
+          <input type="checkbox" checked={this.state.selectAll} onChange={this.toggleAll}/> Select All</span>: null}
+          {this.props.add ? <button 
+          className='modify-project' onClick={() => this.props.add(this.state.selection)}><i className="fas fa-arrow-circle-right"></i></button> : null}
+          {this.props.delete ? <button 
+          className='modify-project' onClick={() => {this.props.delete(this.state.selection);
+    this.setState({selection: []}); }}><i className="fas fa-trash-alt"></i></button> : null}        
+        </div>
+
         {data ? (
           <ReactTable
             data={data}
             columns={columns}
+            defaultPageSize={10}
             // ref={r => (this.selectTable = r)}
             // className="-striped -highlight"
             // {...extraProps}

@@ -2,22 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import { setResource, addRow, addColumn,
-        fetchResources, setColumns, fetchAttributeNames } from "../redux/actions/actionCreators";
+import { setResource, addRow, addColumn } from "../redux/actions/actionCreators";
 import CsvFileInput from '../components/CsvFileInput/CsvFileInput';
-import SelectableTable from '../components/SelectableTable/SelectableTable';
+// import SelectableTable from '../components/SelectableTable/SelectableTable';
+import Spinner from '../components/Spinner/Spinner';
 import "./Resource.css";
 
 class Resource extends Component {
-
-    componentDidMount() {
-        this.props.fetchResources(1);
-        this.props.setColumns([
-            {header: "RESOURCE NAME", accessor: "name"},
-            {header: "RESOURCE CODE", accessor: "code"}
-        ]);
-        this.props.fetchAttributes(1);
-    }
 
     state = {
         search: ''
@@ -44,7 +35,7 @@ class Resource extends Component {
     render() {
 
 
-        let columns = this.props.columns;
+        let columns = this.props.columns.concat(this.props.extraColumns);
         // map((e) => ({...e, Cell: this.renderEditable}));
         let data = this.props.resource;
         if(this.state.search) {
@@ -64,40 +55,53 @@ class Resource extends Component {
             })
             // console.log(data);
         }
-        return (<div className="table-container">
+
+        let table = <ReactTable 
+        data={data} 
+        columns={columns}
+        defaultPageSize={10}
+        // getTdProps={(state, rowInfo) => {
+        //     if (rowInfo && rowInfo.row) {
+        //       return {
+        //         onClick: (e) => {
+        //         //   this.setState({
+        //         //     selected: rowInfo.index
+        //         //   })
+        //         console.log(rowInfo);
+        //         }
+        //         // },
+        //         // style: {
+        //         //   background: rowInfo.index === this.state.selected ? '#00afec' : 'white',
+        //         //   color: rowInfo.index === this.state.selected ? 'white' : 'black'
+        //         // }
+        //       }
+        //     }else{
+        //       return {}
+        //     }
+        //   }
+        // }
+        />
+        if(this.props.loading) {
+            table = <Spinner />
+        }
+        // <span><i className="fas fa-search"></i></span>
+        return (
+        <div className="table-container">
+            <div className='table-header'>
+                <div className='search-bar'><input value={this.state.search} 
+                onChange={e => this.setState({search: e.target.value})}
+                placeholder='Keyword'/></div>
+                <div className='spacer'>Resource Catelog</div>
+                <button><span><i className='fas fa-plus'></i></span></button>
+            </div>
             <CsvFileInput />
             <button onClick={this.props.addRow}>Add Row</button>
             <button onClick={this.props.addColumn}>Add Column</button>
-            Search: <input value={this.state.search} 
-            onChange={e => this.setState({search: e.target.value})}
-            placeholder='search'/>
+            {table}
 
-            <ReactTable 
-            data={data} 
-            columns={columns}
-            getTdProps={(state, rowInfo) => {
-                if (rowInfo && rowInfo.row) {
-                  return {
-                    onClick: (e) => {
-                    //   this.setState({
-                    //     selected: rowInfo.index
-                    //   })
-                    console.log(rowInfo);
-                    }
-                    // },
-                    // style: {
-                    //   background: rowInfo.index === this.state.selected ? '#00afec' : 'white',
-                    //   color: rowInfo.index === this.state.selected ? 'white' : 'black'
-                    // }
-                  }
-                }else{
-                  return {}
-                }
-              }
-            }
-            />
-            <SelectableTable data={data}
-            columns={columns}/>
+
+            {/* <SelectableTable data={data}
+            columns={columns}/> */}
         </div>);
     }
 }
@@ -106,15 +110,13 @@ const mapDispatchToProps = dispatch => {
     return {
         setResource: (resource) => dispatch(setResource(resource)),
         addRow: () => dispatch(addRow()),
-        addColumn: (name) => dispatch(addColumn(name)),
-        setColumns: (columns) => dispatch(setColumns(columns)),
-        fetchResources: (projectId) => dispatch(fetchResources(projectId)),
-        fetchAttributes: (projectId) => dispatch(fetchAttributeNames(projectId))
+        addColumn: (name) => dispatch(addColumn(name))
     }
 }
 
 const mapStateToProps = state => {
-    return {resource: state.resource.data, columns: state.resource.columns};
+    return {resource: state.resource.data, columns: state.resource.columns,
+    extraColumns: state.resource.extraColumns, loading: state.resource.isLoading};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Resource);

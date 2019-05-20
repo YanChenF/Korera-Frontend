@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
 import classes from './Login.module.css';
-
+import { Redirect } from 'react-router-dom';
+import { login } from '../../redux/actions/actionCreators';
+import Spinner from '../../components/Spinner/Spinner';
+import LoginImage from './Login.png';
 class Login extends Component {
 
     state = {
@@ -81,8 +83,8 @@ class Login extends Component {
                   touched: true
               }
           };
-          console.log(updatedControls);
-          console.log(this.state);
+        //   console.log(updatedControls);
+        //   console.log(this.state);
           this.setState( { controls: updatedControls } );
   
       }
@@ -90,6 +92,11 @@ class Login extends Component {
     switchToSingup = () => {
         console.log(this.props.history);
         this.props.history.push('/signup');
+    }
+
+    handleLogin = (e) => {
+        e.preventDefault();
+        this.props.login(this.state.controls.email.value, this.state.controls.password.value);
     }
 
 
@@ -114,14 +121,35 @@ class Login extends Component {
             label={e.id}
             changed={event => this.inputChangedHandler( event, e.id )} />
         )));
-        // console.log(this.props.auth);
+
+        if (this.props.auth.isLoading) {
+            form = <Spinner />
+        }
+
+        let errorMessage = null;
+
+        if (this.props.auth.error) {
+            errorMessage = (
+                <p>{this.props.auth.error}</p>
+            );
+        }
+
+        let authRedirect = null;
+        if (this.props.auth.isAuthenticated) {
+            authRedirect = <Redirect to={this.props.auth.authRedirectPath}/>
+        }
+        console.log(this.props.auth);
         return (<div className={classes.Auth}>
-            <form>
+            {authRedirect}
+            {errorMessage}
+            <div className='loginImage'><img src={LoginImage} alt='Login'/>
+            </div>
+            <form onSubmit={this.handleLogin}>
                 {form}
                 {/* <Button btnType="Success">Log in</Button> */}
-                <button className="btn-login">Log in</button>
+                <div className={classes.login}><button className={classes.button}>Log in</button></div>
             </form>
-            <button onClick={this.switchToSingup}>Switch To Signup</button>
+            <div className={classes.login}><button onClick={this.switchToSingup} className={classes.switch}>Switch To Signup</button></div>
         </div>);
     }
 }
@@ -130,5 +158,9 @@ const mapStateToProps = (state) => {
     return { auth: state.auth }
 } 
 
+const mapDispatchToProps = (dispatch) => ({
+    login: (email, password) => dispatch(login(email, password))
+});
 
-export default connect(mapStateToProps)(Login);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

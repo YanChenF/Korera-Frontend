@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 // import NavBar from 'react-bootstrap/Navbar';
 // import Nav from 'react-bootstrap/Nav';
 import './header.css';
 
-export default class Header extends Component {
-    render() {
+export default (props) => {
         return (
             <header className="toolbar">
             <nav className="toolbar__navigation">
-                <div className="toolbar__logo"><a >THE LOGO</a></div>
-                <div className="spacer" />
+                <div className="toolbar__logo">THE LOGO</div>
+                <div className="spacer" ><h3>{props.project}</h3></div>
                 <div className="toolbar_navigation-items">
                     <ul>
                         <li><i className="far fa-user-circle fa-2x"></i></li>
+                        <li>{props.username}</li>
                         <li><i className="far fa-question-circle fa-2x"></i></li>
+                        <li><button onClick={props.logout}>Logout</button></li>
                     </ul>
                 </div>
             </nav>
@@ -22,15 +23,3 @@ export default class Header extends Component {
 
         );
     }
-}
-
-{/* <NavBar bg="light" expand="lg">
-<NavBar.Brand >Resource Management</NavBar.Brand>
-<NavBar.Collapse>
-    <Nav className="mr-auto"></Nav>
-    <Nav>
-        <Nav.Link><i className="far fa-user-circle fa-2x"></i></Nav.Link>
-        <Nav.Link><i className="far fa-question-circle fa-2x"></i></Nav.Link>
-    </Nav>
-</NavBar.Collapse>
-</NavBar> */}

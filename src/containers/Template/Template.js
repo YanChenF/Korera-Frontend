@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
+import { addColumn, setColumns } from '../../redux/actions/actionCreators';
+import { connect } from 'react-redux';
 import './Template.css';
 
 class Template extends Component {
 
     state = {
         scopeFileds: [{header: "RESOURCE NAME", accessor: "name"}],
-        extraFields: [{field: 'quantity', type: 'number', formula: ''},
-        {field: 'price', type: 'number', formula: ''},
-        {field: 'total price', type: 'formula', formula: 'quantity * number'}]
+        // extraFields: [{field: 'quantity', type: 'number', formula: ''},
+        // {field: 'price', type: 'number', formula: ''},
+        // {field: 'total price', type: 'formula', formula: 'quantity * number'}]
+        // extraFields: this.props.extraColumns? this.props.extraColumns.map(e => ({
+        //     field: e.accessor, type: 'number', formula: ''
+        // })): {}
+        extraFields: []
     }
 
     handleSave = () => {
+        this.props.setColumns(this.state.scopeFileds);
+        this.props.addColumn(this.state.extraFields.map(e => e.field));
         this.props.history.push('/formula');
     }
 
@@ -44,41 +52,43 @@ class Template extends Component {
     render() {
         let surveyFields = this.state.extraFields.map((e, index) => {
             return (
-                <div className='cell' key={e.field}>
-                    <div className='field'>
-                        <label className='label'>Field</label>
-                        <input type='text' value={e.field} 
-                        onChange={e => this.handleInputChange(index, e.target.value, 'field')}/>
+                <div className='cell' key={index}>
+                    <div className='cell-left'>
+                        <div className='input'><label className='label'>Field</label>
+                        <input type='text' name='field' value={e.field} 
+                        onChange={e => this.handleInputChange(index, e.target.value, 'field')}/></div>
                     </div>
-                    <div className='type'>
-                        <label className='label'>Type</label>
-                        <select value={e.type} onChange={e => this.handleInputChange(index, e.target.value, 'type')}>
+                    <div className='cell-left'>
+                        <div className='input'><label className='label'>Type</label> 
+                        <select value={e.type} 
+                        onChange={e => this.handleInputChange(index, e.target.value, 'type')}>
                             <option value='number'>Number</option>
                             <option value='text'>Text</option>
                             <option value='formula'>Formula</option>
-                        </select>
+                        </select></div>
                     </div>
-                    <div className='formula'>
-                    {e.type === 'formula' ?  
-                        <><label className='label'>Formula</label>
-                        <input type='text' value={e.formula} 
-                        onChange={e => this.handleInputChange(index, e.target.value, 'formula')}/></>
-                        : null}
+                    <div className='cell-left'>
+                        <div className='input'>
+                        {e.type === 'formula' ?  
+                            <><label className='label'>Formula</label> 
+                            <input type='text' name='formula' value={e.formula} 
+                            onChange={e => this.handleInputChange(index, e.target.value, 'formula')}/></>
+                            : null}</div>
                     </div>
-                    <div className='delete' onClick={() => this.handleDelete(index)}><i className="fas fa-trash-alt"></i></div>
+                    <button className='delete' onClick={() => this.handleDelete(index)}><i className="fas fa-trash-alt"></i></button>
                 </div>
             )
         });
 
         return (
-        <div>
-            <div className='container-template'>
+        <div className='container-template'>
+            <div className='container-fields'>
                 <div className='scope-fields'>
-                    
+                <h6 className='header-quantity'>Project Scope Fields</h6>
                     <table className='table table-striped'>
-                        <thead>
-                            <tr><td><h5>Project Scope Fields</h5></td></tr>
-                        </thead>
+                        {/* <thead>
+                            <tr><td><h5 className='header-quantity'>Project Scope Fields</h5></td></tr>
+                        </thead> */}
                         <tbody>
                             <tr>
                                 <td>RESOURCE NAME</td>
@@ -92,16 +102,27 @@ class Template extends Component {
                     </table>
                 </div>
                 <div className='survey-fields'>
-                    <h5>Quantity Survey Fields</h5>
+                    <h6 className='header-quantity'>Quantity Survey Fields</h6>
                     {surveyFields}
-                    <div>Add Field<button onClick={this.addField}>
+                    <div id='add-field'>Add Field<button onClick={this.addField}>
                     <i className="fas fa-plus"></i></button></div>
                 </div>
             </div>
-            <button onClick={this.handleSave}>Save</button>
+            <button className='button-save' onClick={this.handleSave}>Save</button>
         </div>
         );
     }
 }
 
-export default Template;
+const mapStateToProps = ({resource}) => (
+    {
+        extraColumns: resource.extraColumns
+    }
+)
+
+const mapDispatchToProps = dispatch => ({
+    addColumn: (cols) => dispatch(addColumn(cols)),
+    setColumns: (cols) => dispatch(setColumns(cols))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Template);

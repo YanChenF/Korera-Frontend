@@ -1,0 +1,21 @@
+.table-project {
+    width: 45%;
+    margin: 10px 10px;
+    display: inline-block;
+}
+
+.container-project {
+    width: 80%;
+    margin: 10px auto 
+}
+
+.header-project {
+    display: flex;
+    align-items: center;
+    background-color: grey;
+    height: 40px;
+}
+
+.modify-project {
+    margin-right: 10px;
+}

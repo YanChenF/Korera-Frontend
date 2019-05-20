@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
+// import Button from '../../components/Button/Button';
 import classes from './Signup.module.css';
+import { signup } from '../../redux/actions/actionCreators';
+import Spinner from '../../components/Spinner/Spinner';
+import { Redirect } from 'react-router-dom';
 
 class Signup extends Component {
 
@@ -32,6 +35,19 @@ class Signup extends Component {
                 validation: {
                     required: true,
                     minLength: 6
+                },
+                valid: false,
+                touched: false
+            },
+            username: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'username'
+                },
+                value: '',
+                validation: {
+                    required: true
                 },
                 valid: false,
                 touched: false
@@ -92,6 +108,12 @@ class Signup extends Component {
         this.props.history.push('/login');
     }
 
+    signup = (e) => {
+        e.preventDefault();
+        this.props.signup(this.state.controls.email.value, this.state.controls.password.value,
+        this.state.controls.username.value);
+    }
+
 
     render() {
         const inputsArray = [];
@@ -114,14 +136,33 @@ class Signup extends Component {
             label={e.id}
             changed={event => this.inputChangedHandler( event, e.id )} />
         )));
+
+        if (this.props.auth.isLoading) {
+            form = <Spinner />
+        }
+
+        let errorMessage = null;
+
+        if (this.props.error) {
+            errorMessage = (
+                <p>{this.props.auth.error.message}</p>
+            );
+        }
+
+        let authRedirect = null;
+        if (this.props.auth.completeSignup) {
+            authRedirect = <Redirect to='/login'/>
+        }
         // console.log(this.props.auth);
         return (<div className={classes.Auth}>
-            <form>
+            <form onSubmit={this.signup}>
                 {form}
+                {authRedirect}
+                {errorMessage}
                 {/* <Button btnType="Success">Log in</Button> */}
-                <button className="btn-login">Log in</button>
+                <div className={classes.signup}><button className={classes.button}>Sign up</button></div>
             </form>
-            <button onClick={this.switchToLogin}>Switch To Login</button>
+            <div className={classes.signup}><button className={classes.switch} onClick={this.switchToLogin}>Switch To Login</button></div>
         </div>);
     }
 }
@@ -130,5 +171,9 @@ const mapStateToProps = (state) => {
     return { auth: state.auth }
 } 
 
+const mapDispatchToProps = (dispatch) => ({
+    signup: (email, password, username) => dispatch(signup(email, password, username))
+});
 
-export default connect(mapStateToProps)(Signup);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

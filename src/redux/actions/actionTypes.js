@@ -1,5 +1,7 @@
 
 export const SET_RESOURCE = "SET_RESOURCE";
+export const RESOURCE_LOADING = 'RESOURCE_LOADING';
+
 export const SET_COLUMNS = 'SET_COLUMNS';
 export const ADD_ROW = 'ADD_ROW';
 export const ADD_COLUMN = 'ADD_COLUMN';
@@ -7,3 +9,14 @@ export const ADD_COLUMN = 'ADD_COLUMN';
 export const ADD_SELECTION = 'ADD_SELECTION';
 export const DELETE_SELECTION = 'DELETE_SELECTION';
 export const SAVE_SELECTION = 'SAVE_SELECTION';
+
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+export const LOGIN_ERR = 'LOGIN_ERROR';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+
+export const REQUEST_LOGOUT = 'REQUEST_LOGOUT';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
+export const SIGNUP_ERR = 'SIGNUP_ERR';
+export const SIGNUP_LOADING = 'SIGNUP_LOADING';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';

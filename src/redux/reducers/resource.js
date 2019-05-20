@@ -6,22 +6,26 @@ const initialState = {
     error: null,
     columns: [],
     selected: [],
-    selectedData: []
+    selectedData: [],
+    extraColumns: []
 };
 
 const Resource = (state = initialState, action) => {
     switch(action.type) {
+        case ActionTypes.RESOURCE_LOADING: 
+            return {...state, isLoading: true}
+
         case ActionTypes.SET_RESOURCE: 
-            return {...state, data: action.payload};
+            return {...state, data: action.payload, isLoading: false};
 
         case ActionTypes.SET_COLUMNS:
             return {...state, columns: action.payload};
 
         case ActionTypes.ADD_ROW:
-            return {...state, data: state.data.concat({})};
+            return {...state, data: state.data.concat({projectId: action.payload, name: '', code: '00000'})};
 
         case ActionTypes.ADD_COLUMN:
-            return {...state, columns: state.columns.concat(action.payload)};
+            return {...state, extraColumns: [...state.extraColumns, ...action.payload]};
 
         case ActionTypes.ADD_SELECTION:
             return {...state, selected: [...state.selected, ...action.payload]};

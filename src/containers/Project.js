@@ -3,31 +3,16 @@ import { connect } from 'react-redux';
 // import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import { setResource, addRow, addColumn,
-        fetchResources, setColumns, fetchAttributeNames,
         addSelected, deleteSelected, saveSelected } from "../redux/actions/actionCreators";
-import "./Resource.css";
+// import "./Resource.css";
 import SelectTable from '../components/SelectableTable/SelectableTable';
+import './Project.css';
 
 class Project extends Component {
 
     state = {
         selection: [],
         selectAll: false
-    }
-    componentDidMount() {
-        this.props.fetchResources(1);
-        this.props.setColumns([
-            {header: "RESOURCE NAME", accessor: "name"},
-            {header: "RESOURCE CODE", accessor: "code"}
-        ]);
-        this.props.fetchAttributes(1);
-        // this.props.columns.unshift({
-        //     Header: "",
-        //     accessor: 'id',
-        //     Cell: row => (
-        //         <input type="checkbox" onClick={e => console.log(row)}/>
-        //     )
-        // })
     }
 
     toggleSelection = (key, shift, row) => {
@@ -96,18 +81,26 @@ class Project extends Component {
 
 
         // console.log(selectedResource);
-        return (<div>
-            <SelectTable resource={this.props.resource}
+        return (
+        <div className='project-container'>
+            <div className='table-project'>
+                <SelectTable resource={this.props.resource}
                 columns={this.props.columns}
                 add={this.props.addSelected}
                 selection={this.props.selected}
-                profile={true}/>
-            <SelectTable resource={selectedResource}
+                profile={true}
+                header='Resource Catelog'/>
+            </div>
+            <div className='table-project'>
+                <SelectTable resource={selectedResource}
                 columns={this.props.columns}
-                delete={this.props.deleteSelected}/>
-            <button onClick={() => this.handleSubmit(selectedResource)}
+                delete={this.props.deleteSelected}
+                header='Project'/>
+            </div>
+            <button 
+            onClick={() => this.handleSubmit(selectedResource)}
             disabled={this.props.selected.length === 0}>Submit</button>
-                </div>);
+        </div>);
       }
 
 //    render() {
@@ -141,9 +134,6 @@ const mapDispatchToProps = dispatch => {
         setResource: (resource) => dispatch(setResource(resource)),
         addRow: () => dispatch(addRow()),
         addColumn: (name) => dispatch(addColumn(name)),
-        setColumns: (columns) => dispatch(setColumns(columns)),
-        fetchResources: (projectId) => dispatch(fetchResources(projectId)),
-        fetchAttributes: (projectId) => dispatch(fetchAttributeNames(projectId)),
         addSelected: (selection) => dispatch(addSelected(selection)),
         deleteSelected: (selection) => dispatch(deleteSelected(selection)),
         saveSelected: (selectedData) => dispatch(saveSelected(selectedData))

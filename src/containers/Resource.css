@@ -3,3 +3,38 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.table-header {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    padding: 0 1rem;
+    background-color: grey;
+}
+
+.spacer {
+    flex: 1;
+    text-align: center;
+  }
+
+.search-bar span {
+    display: inline-block;
+    background-color: orange;
+    color: white;
+    height: 25px;
+    font-size: 20px;
+    width: 20px;
+}
+
+.search-bar input {
+    border: none;
+}
+
+.search-bar {
+    display: inline-block;
+
+}
+
+.search-bar .plus  {
+    background-color: orange;
+}

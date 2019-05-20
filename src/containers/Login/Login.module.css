@@ -1,9 +1,26 @@
 .Auth {
     margin: 20px auto;
-    width: 80%;
+    width: 40%;
 
     box-shadow: 0 2px 3px #ccc;
     border: 1px solid #eee;
     padding: 10px;
     box-sizing: border-box;
+}
+
+.login {
+    padding: 10px;
+}
+
+.button {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    background-color: orange;
+}
+
+.switch {
+    display: inline-block;
+    height: 40px;
+    background-color: orange;
 }
